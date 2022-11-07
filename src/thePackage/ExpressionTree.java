@@ -155,14 +155,14 @@ public class ExpressionTree{
 		if (node.left == null) {
 			return node.data;
 		}
-		return printInFix(node.left) + " " + node.data + " " + printInFix(node.right);
+		return "( " + printInFix(node.left) + " " + node.data + " " + printInFix(node.right) + " )";
 	}
 	
 	public String printInFix() {
 		if (root.left == null) {
 			return root.data;
 		}
-		return printInFix(root.left) + " " + root.data + " " + printInFix(root.right);
+		return "( " + printInFix(root.left) + " " + root.data + " " + printInFix(root.right) + " ) ";
 	}
 	
 	/** 
@@ -189,8 +189,13 @@ public class ExpressionTree{
 	 * @return value that this tree evaluates to
 	 */
 	public double evaluateTree(){
-		
-		return 0;
+		return applyOperator(root.data, evaluateTree(root.left), evaluateTree(root.right));
+	}
+	
+	public double evaluateTree(BTNode<String> node){
+		if (node == null)
+			return 0;
+		return applyOperator(node.data, evaluateTree(node.left), evaluateTree(node.right));
 	}
 	
 
@@ -203,7 +208,21 @@ public class ExpressionTree{
 	 * @throws RuntimeException for anything other than +, -, *, /
 	 */
 	private double applyOperator(String operator, double left, double right) throws RuntimeException {
+		if (!isValidOperator(operator))
+			throw new RuntimeException("\'" + operator +"\' is not a valid operator");
 		
-		return 0;
+		if (operator.equals("+"))
+			return left + right;
+		
+		if (operator.equals("-"))
+			return left - right;
+		
+		if (operator.equals("*"))
+			return left * right;
+		
+		if (operator.equals("/"))
+			return left / right;
+		
+		throw new RuntimeException("\'" + operator +"\' must be a valid operator");
 	}
 }
